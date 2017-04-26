@@ -13,9 +13,21 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import include, url
+from django.conf.urls import (include, url, handler400, handler403,
+                              handler404, handler500)
 from django.contrib import admin
+from django.conf import settings
+from django.views.static import serve
+from django.conf.urls.static import static
+from . import views
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
+    url(r'^user/', include('user.urls', namespace="user")),
+    url(r'^request/', include('request.urls', namespace="request")),
 ]
+
+handler400 = 'x_maquina.views.bad_request'
+handler403 = 'x_maquina.views.permission_denied'
+handler404 = 'x_maquina.views.page_not_found'
+handler500 = 'x_maquina.views.server_error'

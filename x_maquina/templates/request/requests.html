@@ -1,0 +1,96 @@
+{% extends "starter.html" %}
+{% block content %}
+<div class="main-inner">
+  <div class="container">
+    <div class="row">
+      <div class="span8">
+        <div class="widget widget-table action-table">
+          <div class="widget-header"> <i class="icon-list-ol"></i>
+            <h3>Pendentes para aprovação</h3>
+          </div>
+          <!-- /widget-header -->
+          <div class="widget-content">
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th> Usuário </th>
+                  <th> Status </th>
+                  <th> Enviado em </th>
+                  <th> Download do arquivo CAD </th>
+                  <th class="td-actions"> </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td> Jessica Suzuki </td>
+                  <td> Aguardando aprovação </td>
+                  <td> 01 de Abril de 2017 às 22:03 </td>
+                  <td> http://www.x-maquina.com/ </td>
+                  <td class="td-actions"><a href="javascript:;" class="btn btn-small btn-success"><i class="btn-icon-only icon-ok"> </i></a><a href="javascript:;" class="btn btn-danger btn-small"><i class="btn-icon-only icon-remove"> </i></a></td>
+                </tr>
+                <tr>
+                  <td> Eduardo Cotta </td>
+                  <td> Aguardando aprovação </td>
+                  <td> 02 de Abril de 2017 às 12:55 </td>
+                  <td> http://www.x-maquina.com/ </td>
+                  <td class="td-actions"><a href="javascript:;" class="btn btn-small btn-success"><i class="btn-icon-only icon-ok"> </i></a><a href="javascript:;" class="btn btn-danger btn-small"><i class="btn-icon-only icon-remove"> </i></a></td>
+                </tr>
+                <tr>
+                  <td> Allan Pereira </td>
+                  <td> Aguardando aprovação </td>
+                  <td> 02 de Abril de 2017 às 15:20 </td>
+                  <td> http://www.x-maquina.com/ </td>
+                  <td class="td-actions"><a href="javascript:;" class="btn btn-small btn-success"><i class="btn-icon-only icon-ok"> </i></a><a href="javascript:;" class="btn btn-danger btn-small"><i class="btn-icon-only icon-remove"> </i></a></td>
+                </tr>
+                <tr>
+                  <td> Pedro Thiago </td>
+                  <td> Aguardando aprovação </td>
+                  <td> 03 de Abril de 2017 às 06:15 </td>
+                  <td> http://www.x-maquina.com/ </td>
+                  <td class="td-actions"><a href="javascript:;" class="btn btn-small btn-success"><i class="btn-icon-only icon-ok"> </i></a><a href="javascript:;" class="btn btn-danger btn-small"><i class="btn-icon-only icon-remove"> </i></a></td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+          <!-- /widget-content -->
+        </div>
+        <!-- /widget -->
+      </div>
+      <!-- /span6 -->
+      <div class="span4">
+        <div class="widget widget-nopad">
+          <div class="widget-header"> <i class="icon-list-ol"></i>
+            <h3> Solicitações</h3>
+          </div>
+          <!-- /widget-header -->
+          <div class="widget-content">
+            <div class="widget big-stats-container">
+              <div class="widget-content">
+                <h6 class="bigstats">Estatísticas,números sobre todas as solicitações já feitas</h6>
+                <div id="big_stats" class="cf">
+                  <div class="stat"> <i class="icon-bolt"></i> <span class="value">851</span> <small>Solicitações <b>realizadas</b></small></div>
+                  <!-- .stat -->
+
+                  <div class="stat"> <i class="icon-thumbs-up-alt"></i> <span class="value">423</span> <small>Solicitações <b>concluídas</b></small></div>
+                  <!-- .stat -->
+
+                  <div class="stat"> <i class="icon-thumbs-down-alt"></i> <span class="value">25</span> <small>Solicitações <b>negadas</b></small></div>
+                  <!-- .stat -->
+                </div>
+              </div>
+              <!-- /widget-content -->
+
+            </div>
+          </div>
+        </div>
+        <!-- /widget -->
+      </div>
+      <!-- /span6 -->
+    </div>
+    <!-- /row -->
+  </div>
+  <!-- /container -->
+</div>
+<!-- /main-inner -->
+{% endblock %}
