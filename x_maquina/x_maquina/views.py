@@ -1,4 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
+def home(request):
+    if request.user.is_authenticated():
+        return render(request, 'home.html', {})
+    return redirect('user:Login')
 
 # HTTP Error 400
 def bad_request(request):

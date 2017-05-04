@@ -25,7 +25,6 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </a>
-
         <a class="brand" href="index.html">
           X-Máquina
         </a>
@@ -35,20 +34,20 @@
   <div class="account-container">
     <div class="content clearfix">
       {% if form.errors %}
-        {% if form.non_field_errors %}
-          <div class="alert alert-danger alert-dismissable" role="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  {{ form.non_field_errors|striptags }}
-          </div>
-        {% endif %}
-          {% for field in form %}
-              {% if field.errors %}
-              <div class="alert alert-danger alert-dismissable" role="alert">
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  {{ field.label }}: {{ field.errors|striptags }}<br>
-              </div>
-              {% endif %}
-          {% endfor %}
+      {% if form.non_field_errors %}
+      <div class="alert alert-danger alert-dismissable" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        {{ form.non_field_errors|striptags }}
+      </div>
+      {% endif %}
+      {% for field in form %}
+      {% if field.errors %}
+      <div class="alert alert-danger alert-dismissable" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        {{ field.label }}: {{ field.errors|striptags }}<br>
+      </div>
+      {% endif %}
+      {% endfor %}
       {% endif %}
       <form action="{% url 'user:Login' %}" method="POST">
         {% csrf_token %}
@@ -75,7 +74,62 @@
       </form>
     </div> <!-- /content -->
   </div> <!-- /account-container -->
-
+  <br><br><br>
+  <div class="extra">
+    <div class="extra-inner">
+      <div class="container">
+        <div class="row">
+          <div class="span6">
+            <h4>Universidade de Brasília</h4>
+            <h5>Faculdade UnB Gama</h5>
+            <ul>
+              <li>Projeto realizado por alunos da disciplina Projeto Integrador de Engenharia 2, 1º/2017</li>
+            </ul>
+          </div>
+          <!-- /span3 -->
+          <div class="span3">
+            <h4>Ajuda</h4>
+            <ul>
+              <li><a href="javascript:;">FAQ</a></li>
+              <li><a href="javascript:;">Pergunte-nos :)</a></li>
+              <li><a href="javascript:;">Vídeo Tutorial</a></li>
+              <li><a href="javascript:;">Feedback</a></li>
+            </ul>
+          </div>
+          <!-- /span3 -->
+          <div class="span3">
+            <h4>Termos de Uso</h4>
+            <ul>
+              <li><a href="javascript:;">Licença</a></li>
+              <li><a href="javascript:;">Política de Privacidade</a></li>
+            </ul>
+          </div>
+          <!-- /span4 -->
+        </div>
+        <!-- /row -->
+      </div>
+      <!-- /container -->
+    </div>
+    <!-- /extra-inner -->
+  </div>
+  <!-- /extra -->
+  <div class="footer">
+    <div class="footer-inner">
+      <div class="container">
+        <div class="row">
+          <div class="span12"> &copy; 2017 <a href="http://www.x-maquina.com/">X-Máquina</a>. </div>
+          <!-- /span12 -->
+        </div>
+        <!-- /row -->
+      </div>
+      <!-- /container -->
+    </div>
+    <!-- /footer-inner -->
+  </div>
+  <!-- /footer -->
+  <!-- Le javascript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
   <script src="{% static 'js/jquery-1.7.2.min.js' %}"></script>
   <script src="{% static 'js/bootstrap.js' %}"></script>
   <script src="{% static 'js/signin.js' %}"></script>
