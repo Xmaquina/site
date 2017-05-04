@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block title %}Formulário de Solicitação{% endblock %}
+{% block content %}
+<div class="main-inner">
+  <div class="container">
+    <div class="row">
+      <div class="span6">
+        <div class="widget">
+	      	<div class="widget-content">
+            <form role="form" method="POST" enctype="multipart/form-data" class="form">
+              {% csrf_token %}
+              <fieldset class="form-group">
+                <legend>Selecione o arquivo:</legend>
+                {{ form }}
+              </fieldset>
+              <br>
+              {% buttons %}
+              <button type="submit" class="btn btn-primary">
+                <i class="icon-save"></i> Salvar
+              </button>
+              {% endbuttons %}
+            </form>
+          </div> <!-- /widget-content -->
+        </div> <!-- /widget -->
+      </div>
+    </div>
+    <!-- /row -->
+  </div>
+  <!-- /container -->
+</div>
+<!-- /main-inner -->
+{% endblock %}
