@@ -1,5 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from request.forms import RequestForm
+import traceback
 
 
 def request_list(request):
@@ -8,18 +10,19 @@ def request_list(request):
 
 def request_new(request):
     if request.method == 'POST':
-        form = RequestForm(request.POST)
-        if form.is_valid():
+        request_form = RequestForm(request.POST, request.FILES)
+        if request_form.is_valid():
             try:
-                form.save()
+                req = request_form.save(commit=False)
+                req.owner = request.user
+                req.save()
                 messages.success(request, "Solicitação recebida!")
+                return redirect('Home')
             except Exception as e:
                 messages.error(request, "Falha ao salvar solicitação!")
-                return render(request, 'ue/prospect_form.html', {
-                    'prospect_form': prospect_form,
-                    'company_form': company_form})
-            return redirect('Home')
+                print(e)
+                traceback.print_exc()
     else:
         request_form = RequestForm()
-        return render(request, 'request/request_form.html', {
-                'form': request_form})
+    return render(request, 'request/request_form.html', {
+            'form': request_form})

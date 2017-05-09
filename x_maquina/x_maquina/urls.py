@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^user/', include('user.urls', namespace="user")),
     url(r'^request/', include('request.urls', namespace="request")),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler400 = 'x_maquina.views.bad_request'
 handler403 = 'x_maquina.views.permission_denied'

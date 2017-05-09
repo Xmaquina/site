@@ -10,6 +10,6 @@ class RequestForm(ModelForm):
         model = Request
         fields = ['cad_file']
         widgets = {
-            'cad_file': forms.ClearableFileInput(
+            'cad_file': forms.FileInput(
                 attrs={'style':'margin:10px; width:90%','class':'btn btn-default','accept': '.stl, .STL'}),
         }

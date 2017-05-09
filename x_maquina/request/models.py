@@ -2,6 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return 'user_{0}/{1}'.format(instance.owner.id, filename)
+
+
 class Request(models.Model):
     RECEIVED = 0
     IN_PROGRESS = 1
@@ -18,7 +23,7 @@ class Request(models.Model):
         (FAILED, 'Finalizado com Falha'),
     )
     status = models.IntegerField("Status", choices=STATUS, default=RECEIVED)
-    sent_at = models.DateField("Enviado em")
+    sent_at = models.DateField("Enviado em", auto_now=True)
     owner = models.ForeignKey(
         User,
         verbose_name="Proprietário",
@@ -33,7 +38,7 @@ class Request(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={
             'is_staff': True})
-    cad_file = models.FileField("Arquivo STL")
+    cad_file = models.FileField("Arquivo STL", upload_to=user_directory_path)
 
     def __str__(self):
         return str(self.sent_at) + " | " + self.owner + \
