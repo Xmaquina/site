@@ -1,5 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+
+
+def validate_stl_file(file):
+    LIMIT = 25 * 1024 * 1024  # 25MB
+    valid_extensions = ['.pdf']
+    import os
+    ext = os.path.splitext(file.name)[1]
+    if ext not in valid_extensions:
+        raise ValidationError(
+            "Tipo de arquivo não suportado, somente arquivos STL")
+    if file.size > LIMIT:
+        raise ValidationError("Arquivo muito grande, tamanho máximo de 25 MB")
 
 
 def user_directory_path(instance, filename):
@@ -23,7 +36,7 @@ class Request(models.Model):
         (FAILED, 'Finalizado com Falha'),
     )
     status = models.IntegerField("Status", choices=STATUS, default=RECEIVED)
-    sent_at = models.DateField("Enviado em", auto_now=True)
+    sent_at = models.DateTimeField("Enviado em", auto_now=True)
     owner = models.ForeignKey(
         User,
         verbose_name="Proprietário",
@@ -38,11 +51,14 @@ class Request(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={
             'is_staff': True})
-    cad_file = models.FileField("Arquivo STL", upload_to=user_directory_path)
+    cad_file = models.FileField(
+        "Arquivo STL",
+        upload_to=user_directory_path,
+        validators=[validate_stl_file])
 
     def __str__(self):
-        return str(self.sent_at) + " | " + self.owner + \
-            " - aprovado por: " + self.approved_by
+        return str(self.sent_at) + " | " + str(self.owner) + \
+            " - aprovado por: " + str(self.approved_by)
 
     class Meta:
         verbose_name = "Solicitação"
