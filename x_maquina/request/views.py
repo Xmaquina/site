@@ -1,11 +1,29 @@
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from request.forms import RequestForm
+from request.models import Request
 import traceback
 
 
 def request_list(request):
-    return render(request, 'request/requests.html', {})
+    reqs = None
+    if request.user.is_superuser:
+        pending_requests = Request.objects.filter(
+            status=Request.RECEIVED).order_by('sent_at')
+        other_requests = Request.objects.exclude(status=Request.RECEIVED).order_by('sent_at')
+    else:
+        try:
+            pending_requests = Request.objects.filter(
+                owner=request.user, status=Request.RECEIVED).order_by('sent_at')
+            other_requests = Request.objects.filter(
+                owner=request.user).exclude(status=Request.RECEIVED).order_by('sent_at')
+        except BaseException:
+            raise PermissionDenied
+    return render(request,
+                  'request/requests.html',
+                  {'pending_requests': pending_requests,
+                   'other_requests': other_requests})
 
 
 def request_new(request):
@@ -25,4 +43,4 @@ def request_new(request):
     else:
         request_form = RequestForm()
     return render(request, 'request/request_form.html', {
-            'form': request_form})
+        'form': request_form})

@@ -28,12 +28,12 @@ class Request(models.Model):
     SUCCESS = 4
     FAILED = 5
     STATUS = (
-        (RECEIVED, 'Recebido'),
+        (RECEIVED, 'Aguardando aprovação'),
         (APPROVED, 'Aprovado'),
-        (IN_PROGRESS, 'Em Andamento'),
+        (IN_PROGRESS, 'Em andamento'),
         (CANCELLED, 'Cancelado'),
-        (SUCCESS, 'Finalizado com Sucesso'),
-        (FAILED, 'Finalizado com Falha'),
+        (SUCCESS, 'Finalizado com sucesso'),
+        (FAILED, 'Finalizado com falha'),
     )
     status = models.IntegerField("Status", choices=STATUS, default=RECEIVED)
     sent_at = models.DateTimeField("Enviado em", auto_now=True)
