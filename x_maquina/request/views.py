@@ -11,19 +11,34 @@ def request_list(request):
     if request.user.is_superuser:
         pending_requests = Request.objects.filter(
             status=Request.RECEIVED).order_by('sent_at')
-        other_requests = Request.objects.exclude(status=Request.RECEIVED).order_by('sent_at')
+        other_requests = Request.objects.exclude(
+            status=Request.RECEIVED).order_by('sent_at')
+        total_reqs = Request.objects.count()
+        total_concluded_reqs = Request.objects.filter(
+            status=Request.SUCCESS).count()
+        total_negated_reqs = Request.objects.filter(
+            status=Request.CANCELLED).count()
     else:
         try:
             pending_requests = Request.objects.filter(
                 owner=request.user, status=Request.RECEIVED).order_by('sent_at')
             other_requests = Request.objects.filter(
-                owner=request.user).exclude(status=Request.RECEIVED).order_by('sent_at')
+                owner=request.user).exclude(
+                status=Request.RECEIVED).order_by('sent_at')
+            total_reqs = Request.objects.filter(owner=request.user).count()
+            total_concluded_reqs = Request.objects.filter(
+                owner=request.user, status=Request.SUCCESS).count()
+            total_negated_reqs = Request.objects.filter(
+                owner=request.user, status=Request.CANCELLED).count()
         except BaseException:
             raise PermissionDenied
     return render(request,
                   'request/requests.html',
                   {'pending_requests': pending_requests,
-                   'other_requests': other_requests})
+                   'other_requests': other_requests,
+                   'total_reqs': total_reqs,
+                   'total_concluded_reqs': total_concluded_reqs,
+                   'total_negated_reqs': total_negated_reqs})
 
 
 def request_new(request):
