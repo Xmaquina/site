@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 
 def validate_stl_file(file):
     LIMIT = 25 * 1024 * 1024  # 25MB
-    valid_extensions = ['.pdf']
+    valid_extensions = ['.stl']
     import os
     ext = os.path.splitext(file.name)[1]
     if ext not in valid_extensions:
@@ -59,6 +59,13 @@ class Request(models.Model):
     def __str__(self):
         return str(self.sent_at) + " | " + str(self.owner) + \
             " - aprovado por: " + str(self.approved_by)
+
+    def delete(self, *args, **kwargs):
+        try:
+            self.cad_file.delete()
+        except:
+            pass
+        super(Request, self).delete(*args, **kwargs)
 
     class Meta:
         verbose_name = "Solicitação"

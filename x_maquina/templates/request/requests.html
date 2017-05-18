@@ -1,9 +1,5 @@
-{% extends "base.html" %}
-{% load static %}
-{% block extrastyle %}
-<link href="{% static 'css/pages/dashboard.css'%}" rel="stylesheet">
-{% endblock %}
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block extrastyle %}
+<link href="{% static 'css/pages/dashboard.css'%}" rel="stylesheet"> {% endblock %} {% block content %}
 <div class="main-inner">
   <div class="container">
     <div class="row">
@@ -30,8 +26,7 @@
                   <tr>
                     <td colspan="5" style="text-align:center">Nenhuma solicitação</td>
                   </tr>
-                  {% else %}
-                  {% for req in pending_requests %}
+                  {% else %} {% for req in pending_requests %}
                   <tr>
                     <td>{% firstof req.owner.get_full_name req.owner.get_username %}</td>
                     <td>{{ req.get_status_display }}</td>
@@ -50,26 +45,7 @@
                       </a>
                     </td>
                   </tr>
-                  <tr>
-                    <td>{% firstof req.owner.get_full_name req.owner.get_username %}</td>
-                    <td>{{ req.get_status_display }}</td>
-                    <td>{{ req.sent_at }}</td>
-                    <td class="td-actions">
-                      <a href="{{ req.cad_file.url }}" class="btn btn-small btn-primary">
-                        <i class="btn-icon-only icon-download"> </i> Download
-                      </a>
-                    </td>
-                    <td class="td-actions">
-                      <a href="javascript:;" class="btn btn-small btn-success">
-                        <i class="btn-icon-only icon-ok"> </i> Aprovar
-                      </a>&nbsp;
-                      <a href="javascript:;" class="btn btn-danger btn-small">
-                        <i class="btn-icon-only icon-remove"> </i> Cancelar
-                      </a>
-                    </td>
-                  </tr>
-                  {% endfor %}
-                  {% endif %}
+                  {% endfor %} {% endif %}
                 </tbody>
               </table>
             </div>
@@ -100,8 +76,7 @@
                   <tr>
                     <td colspan="5" style="text-align:center">Nenhuma solicitação</td>
                   </tr>
-                  {% else %}
-                  {% for req in other_requests %}
+                  {% else %} {% for req in other_requests %}
                   <tr>
                     <td>{% firstof req.owner.get_full_name req.owner.get_username %}</td>
                     <td>{{ req.get_status_display }}</td>
@@ -112,8 +87,7 @@
                       </a>
                     </td>
                   </tr>
-                  {% endfor %}
-                  {% endif %}
+                  {% endfor %} {% endif %}
                 </tbody>
               </table>
             </div>
