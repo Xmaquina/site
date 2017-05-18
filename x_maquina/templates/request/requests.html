@@ -1,0 +1,135 @@
+{% extends "base.html" %} {% load static %} {% block extrastyle %}
+<link href="{% static 'css/pages/dashboard.css'%}" rel="stylesheet"> {% endblock %} {% block content %}
+<div class="main-inner">
+  <div class="container">
+    <div class="row">
+      <div class="span8">
+        <div>
+          <div class="widget widget-table action-table">
+            <div class="widget-header"> <i class="icon-list-ol"></i>
+              <h3>Pendentes para aprovação</h3>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content" style="overflow-x:auto;max-height:400px;overflow:auto">
+              <table class="table table-striped table-bordered table-responsive">
+                <thead>
+                  <tr>
+                    <th> Usuário </th>
+                    <th> Status </th>
+                    <th style="min-width:100px"> Enviado em </th>
+                    <th style="min-width:100px"> Arquivo STL </th>
+                    <th class="td-actions" style="min-width:180px; text-align:center"> Ações para a solicitação </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if not pending_requests %}
+                  <tr>
+                    <td colspan="5" style="text-align:center">Nenhuma solicitação</td>
+                  </tr>
+                  {% else %} {% for req in pending_requests %}
+                  <tr>
+                    <td>{% firstof req.owner.get_full_name req.owner.get_username %}</td>
+                    <td>{{ req.get_status_display }}</td>
+                    <td>{{ req.sent_at }}</td>
+                    <td class="td-actions">
+                      <a href="{{ req.cad_file.url }}" class="btn btn-small btn-primary">
+                        <i class="btn-icon-only icon-download"> </i> Download
+                      </a>
+                    </td>
+                    <td class="td-actions">
+                      <a href="javascript:;" class="btn btn-small btn-success">
+                        <i class="btn-icon-only icon-ok"> </i> Aprovar
+                      </a>&nbsp;
+                      <a href="javascript:;" class="btn btn-danger btn-small">
+                        <i class="btn-icon-only icon-remove"> </i> Cancelar
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %} {% endif %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /widget-content -->
+          </div>
+          <!-- /widget -->
+        </div>
+        <!-- /span12 -->
+
+        <div>
+          <div class="widget widget-table action-table">
+            <div class="widget-header"> <i class="icon-list-ol"></i>
+              <h3>Finalizadas</h3>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content" style="overflow-x:auto;max-height:600px;overflow:auto">
+              <table class="table table-striped table-bordered table-responsive">
+                <thead>
+                  <tr>
+                    <th> Usuário </th>
+                    <th> Status </th>
+                    <th style="min-width:100px"> Enviado em </th>
+                    <th style="min-width:100px"> Arquivo STL </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if not other_requests %}
+                  <tr>
+                    <td colspan="5" style="text-align:center">Nenhuma solicitação</td>
+                  </tr>
+                  {% else %} {% for req in other_requests %}
+                  <tr>
+                    <td>{% firstof req.owner.get_full_name req.owner.get_username %}</td>
+                    <td>{{ req.get_status_display }}</td>
+                    <td>{{ req.sent_at }}</td>
+                    <td class="td-actions">
+                      <a href="{{ req.cad_file.url }}" class="btn btn-small btn-primary">
+                        <i class="btn-icon-only icon-download"> </i> Download
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %} {% endif %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /widget-content -->
+          </div>
+          <!-- /widget -->
+        </div>
+        <!-- /span12 -->
+      </div>
+      <!-- /span8 -->
+      <div class="span4">
+        <div class="widget widget-nopad">
+          <div class="widget-header"> <i class="icon-list-ol"></i>
+            <h3> Solicitações</h3>
+          </div>
+          <!-- /widget-header -->
+          <div class="widget-content">
+            <div class="widget big-stats-container">
+              <div class="widget-content">
+                <div id="big_stats" class="cf">
+                  <div class="stat"> <i class="icon-bolt"></i> <span class="value">{{ total_reqs|default:"0" }}</span> <br><small>Solicitações <b>realizadas</b></small></div>
+                  <!-- .stat -->
+
+                  <div class="stat"> <i class="icon-thumbs-up-alt"></i> <span class="value">{{ total_concluded_reqs|default:"0" }}</span> <br><small>Solicitações <b>concluídas</b></small></div>
+                  <!-- .stat -->
+
+                  <div class="stat"> <i class="icon-thumbs-down-alt"></i> <span class="value">{{ total_negated_reqs|default:"0" }}</span> <br><small>Solicitações <b>canceladas</b></small></div>
+                  <!-- .stat -->
+                </div>
+              </div>
+              <!-- /widget-content -->
+
+            </div>
+          </div>
+        </div>
+        <!-- /widget -->
+      </div>
+      <!-- /span4 -->
+    </div>
+    <!-- /row -->
+  </div>
+  <!-- /container -->
+</div>
+<!-- /main-inner -->
+{% endblock %}

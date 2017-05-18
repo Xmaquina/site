@@ -1,0 +1,16 @@
+{% with request.resolver_match.url_name as option %}
+<div class="subnavbar">
+  <div class="subnavbar-inner">
+    <div class="container">
+      <ul class="mainnav">
+        <li class="{% if option == 'Status_CNC' %}active{% endif %}"><a href="shortcodes.html"><i class="icon-off"></i><span>Status da CNC</span> </a> </li>
+        <li class="{% if option == 'Request_list' %}active{% endif %}"><a href="{% url 'request:Request_list' %}"><i class="icon-list-ol"></i><span>Lista de solicitações</span> </a> </li>
+        <li class="{% if option == 'Upload_file' %}active{% endif %}"><a href="{% url 'request:Request_new' %}"><i class="icon-upload-alt"></i><span>Enviar arquivo</span> </a> </li>
+      </ul>
+    </div>
+    <!-- /container -->
+  </div>
+  <!-- /subnavbar-inner -->
+</div>
+<!-- /subnavbar -->
+{% endwith %}
