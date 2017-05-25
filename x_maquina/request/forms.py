@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.forms import ModelForm, ClearableFileInput
 from django import forms
 
@@ -11,5 +12,5 @@ class RequestForm(ModelForm):
         fields = ['cad_file']
         widgets = {
             'cad_file': forms.FileInput(
-                attrs={'style':'margin:10px; width:90%','class':'btn btn-default','accept': '.stl, .STL'}),
+                attrs={'style': 'margin:10px; width:90%', 'class': 'btn btn-default', 'accept': '.stl, .STL'}),
         }
