@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for x_maquina project.
 
@@ -111,6 +112,8 @@ else:
 PROJECT_DIR = Path(__file__).parent
 
 STATIC_URL = '/static/'
+if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
+    STATIC_URL = "http://storage.googleapis.com/x-maquina/static/"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
