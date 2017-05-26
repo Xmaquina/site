@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.views.static import serve
 from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from . import views
 
 urlpatterns = [
@@ -27,8 +28,14 @@ urlpatterns = [
     url(r'^user/', include('user.urls', namespace="user")),
     url(r'^request/', include('request.urls', namespace="request")),
 ]
+
+# This enables static files to be served from the Gunicorn server
+# In Production, serve static files from Google Cloud Storage or an alternative
+# CDN
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
+    urlpatterns += staticfiles_urlpatterns()
 
 handler400 = 'x_maquina.views.bad_request'
 handler403 = 'x_maquina.views.permission_denied'
