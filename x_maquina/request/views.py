@@ -56,7 +56,7 @@ def request_new(request):
                         'Slic3r/slic3r.pl ' + str(req.cad_file.path),
                         shell=True, timeout=5)
                     messages.success(request, "Solicitação recebida!")
-                    return redirect('Home')
+                    return redirect('request:Request_list')
                 except subprocess.CalledProcessError as gcode_exception:
                     req.delete()
                     print("error code " + str(gcode_exception.returncode) +

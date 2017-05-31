@@ -28,7 +28,9 @@
                   </tr>
                   {% else %} {% for req in pending_requests %}
                   <tr>
-                    <td>{% firstof req.owner.get_full_name req.owner.get_username %}</td>
+                    <td style="text-align:center">
+                      {{ req.owner.get_full_name }}<br> ({{ req.owner.get_username }})
+                    </td>
                     <td>{{ req.get_status_display }}</td>
                     <td>{{ req.sent_at }}</td>
                     <td class="td-actions">

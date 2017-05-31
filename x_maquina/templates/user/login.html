@@ -55,7 +55,7 @@
         <div class="login-fields">
           <p>Preencha os campos</p>
           <div class="field">
-            <label for="username">Nome de usuário ou e-mail</label>
+            <label for="username">E-mail</label>
             {{ form.username }}
           </div> <!-- /field -->
           <div class="field">
@@ -66,7 +66,7 @@
 
         <div class="login-actions">
           <div class="login-extra">
-            <a href="signup.html" class="">Não possui uma conta?</a><br>
+            <a href="{% url 'user:Registrate' %}" class="">Não possui uma conta?</a><br>
             <a href="#">Recuperar senha</a>
           </div> <!-- /login-extra -->
           <button type="submit" class="button btn btn-success btn-large">Entrar</button>

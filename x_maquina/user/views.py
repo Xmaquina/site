@@ -15,21 +15,15 @@ def user_logout(request):
 def registrate(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
-        success = False
         if form.is_valid():
             try:
                 user = form.save()
-                login(user)
-                success = True
+                login(request, user)
+                messages.success(request, "Bem-vindo à X-Máquina!")
+                return redirect('Home')
             except Exception as e:
-                success = False
                 print(e)
                 traceback.print_exc()
-        if not success:
-            messages.error(request, "Falha de registro!")
-        else:
-            messages.success(request, _("Entry saved!"))
-            return redirect('Home')
     else:
         form = UserCreationForm()
     return render(request, 'user/signup.html', {'form': form})

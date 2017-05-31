@@ -15,7 +15,7 @@ class LoginForm(AuthenticationForm):
             attrs={
                 'class': 'login username-field',
                 'name': 'username',
-                'placeholder': 'Usuário ou e-mail'}))
+                'placeholder': 'E-mail'}))
 
     password = forms.CharField(
         label="Senha",
@@ -30,13 +30,26 @@ class LoginForm(AuthenticationForm):
 class UserCreationForm(UserCreationForm):
     email = EmailField(label=_("Email address"), required=True)
 
-    class Meta:
-        model = User
-        fields = ("username", "email", "password1", "password2")
+    def __init__(self, *args, **kwargs):
+        super(UserCreationForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].label = "Nome"
+        self.fields['first_name'].required = True
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email):
+            raise forms.ValidationError(
+                "E-mail já cadastrado!", code='email_registered')
+        return email
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
         user.email = self.cleaned_data["email"]
+        user.username = user.email
         if commit:
             user.save()
         return user
+
+    class Meta:
+        model = User
+        fields = ("first_name", "email", "password1", "password2")
