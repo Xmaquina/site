@@ -34,20 +34,20 @@
   <div class="account-container">
     <div class="content clearfix">
       {% if form.errors %}
-      {% if form.non_field_errors %}
-      <div class="alert alert-danger alert-dismissable" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        {{ form.non_field_errors|striptags }}
-      </div>
-      {% endif %}
-      {% for field in form %}
-      {% if field.errors %}
-      <div class="alert alert-danger alert-dismissable" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        {{ field.label }}: {{ field.errors|striptags }}<br>
-      </div>
-      {% endif %}
-      {% endfor %}
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger alert-dismissable" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          {{ form.non_field_errors|striptags }}
+        </div>
+        {% endif %}
+        {% for field in form %}
+          {% if field.errors %}
+          <div class="alert alert-danger alert-dismissable" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            {{ field.label }}: {{ field.errors|striptags }}<br>
+          </div>
+          {% endif %}
+        {% endfor %}
       {% endif %}
       <form action="{% url 'user:Login' %}" method="POST">
         {% csrf_token %}
