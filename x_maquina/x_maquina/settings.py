@@ -39,7 +39,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap3',
     'request',
     'user',
 )
@@ -133,4 +132,10 @@ LANGUAGE_CODE = 'pt-BR'
 
 TIME_ZONE = 'America/Sao_Paulo'
 
-CNC_EMAIL = ''
+CNC_EMAIL = 'xmaquinaxmaquina@gmail.com'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'xmaquinaservidor@gmail.com'
+EMAIL_HOST_PASSWORD = 'x1maquina2'
+EMAIL_PORT = 587

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Formulário de Solicitação{% endblock %}
+{% block title %}Perfil{% endblock %}
 {% block content %}
 <div class="main-inner">
   <div class="container">
@@ -25,15 +25,15 @@
       <div class="span6">
         <div class="widget">
 	      	<div class="widget-content">
-            <form role="form" method="POST" enctype="multipart/form-data" class="form">
+            <form role="form" method="POST" class="form">
               {% csrf_token %}
               <fieldset class="form-group">
-                <legend>Preencha os campos:</legend>
+                <legend>Dados do seu perfil:</legend>
                 {{ form }}
               </fieldset>
               <br>
               <button type="submit" class="btn btn-primary">
-                <i class="icon-save"></i> Salvar
+                <i class="icon-save"></i> Alterar
               </button>
             </form>
           </div> <!-- /widget-content -->

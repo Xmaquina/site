@@ -20,8 +20,10 @@ def request_list(request):
     if request.user.is_superuser:
         pending_requests = Request.objects.filter(
             status=Request.RECEIVED).order_by('-sent_at')
+        ongoing_requests = Request.objects.filter(
+            status=Request.IN_PROGRESS).order_by('-sent_at')
         other_requests = Request.objects.exclude(
-            status=Request.RECEIVED).order_by('-sent_at')
+            status__in=[Request.RECEIVED, Request.IN_PROGRESS]).order_by('-sent_at')
         total_reqs = Request.objects.count()
         total_concluded_reqs = Request.objects.filter(
             status=Request.SUCCESS).count()
@@ -31,9 +33,11 @@ def request_list(request):
         try:
             pending_requests = Request.objects.filter(
                 owner=request.user, status=Request.RECEIVED).order_by('-sent_at')
+            ongoing_requests = Request.objects.filter(
+                owner=request.user, status=Request.IN_PROGRESS).order_by('-sent_at')
             other_requests = Request.objects.filter(
                 owner=request.user).exclude(
-                status=Request.RECEIVED).order_by('-sent_at')
+                status__in=[Request.RECEIVED, Request.IN_PROGRESS]).order_by('-sent_at')
             total_reqs = Request.objects.filter(owner=request.user).count()
             total_concluded_reqs = Request.objects.filter(
                 owner=request.user, status=Request.SUCCESS).count()
@@ -44,6 +48,7 @@ def request_list(request):
     return render(request,
                   'request/requests.html',
                   {'pending_requests': pending_requests,
+                   'ongoing_requests': ongoing_requests,
                    'other_requests': other_requests,
                    'total_reqs': total_reqs,
                    'total_concluded_reqs': total_concluded_reqs,
@@ -126,10 +131,13 @@ def request_approve(request, req_id):
     req = get_object_or_404(Request, pk=req_id)
     if not request.user.is_superuser and req.owner != request.user:
         raise PermissionDenied
+    success = False
     try:
-        req.approve()
-        messages.success(request, "Solicitação cancelada!")
+        success = req.approve()
     except Exception as e:
         print(e)
+    if success:
+        messages.success(request, "Solicitação aprovada!")
+    else:
         messages.error(request, "Falha ao aprovar solicitação!")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

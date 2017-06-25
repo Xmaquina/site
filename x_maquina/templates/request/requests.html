@@ -15,7 +15,7 @@
                 <thead>
                   <tr>
                     <th style="width:100px"> Usuário </th>
-                    <th> Tipo de solicitação </th>
+                    <th> Tipo </th>
                     <th> Status </th>
                     <th style="min-width:100px"> Enviado em </th>
                     <th style="min-width:150px; text-align:center"> Download Arquivos </th>
@@ -48,7 +48,7 @@
                     </td>
                     <td class="td-actions">
                       {% if req.status == 0 %}
-                      <a href="javascript:;" data-toggle="modal" data-target="#confirm-approval-modal" class="btn btn-success btn-small approve-request">
+                      <a href="#" data-href="{% url 'request:Request_approve' req_id=req.pk %}" data-toggle="modal" data-target="#confirm-approval-modal" class="btn btn-success btn-small approve-request">
                         <i class="btn-icon-only icon-ok"> </i> Aprovar
                       </a>&nbsp;
                       {% endif %}
@@ -72,6 +72,53 @@
         <div>
           <div class="widget widget-table action-table">
             <div class="widget-header"> <i class="icon-list-ol"></i>
+              <h3>Em andamento</h3>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content" style="overflow-x:auto;max-height:600px;overflow:auto">
+              <table class="table table-striped table-bordered table-responsive">
+                <thead>
+                  <tr>
+                    <th> Usuário </th>
+                    <th> Tipo </th>
+                    <th> Status </th>
+                    <th style="min-width:100px"> Enviado em </th>
+                    <th style="min-width:100px"> Arquivo CAD </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if not ongoing_requests %}
+                  <tr>
+                    <td colspan="5" style="text-align:center">Nenhuma solicitação</td>
+                  </tr>
+                  {% else %} {% for req in ongoing_requests %}
+                  <tr>
+                    <td style="text-align:center;">
+                      {{ req.owner.get_full_name }}<br>
+                      <small style="font-size:10px">{{ req.owner.get_username }}</small>
+                    </td>
+                    <td>{{ req.get_cnc_option_display }}</td>
+                    <td>{{ req.get_status_display }}</td>
+                    <td>{{ req.sent_at }}</td>
+                    <td class="td-actions">
+                      <a href="{{ req.cad_file.url }}" class="btn btn-small btn-primary">
+                        <i class="btn-icon-only icon-download"> </i> Download
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %} {% endif %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /widget-content -->
+          </div>
+          <!-- /widget -->
+        </div>
+        <!-- /span12 -->
+
+        <div>
+          <div class="widget widget-table action-table">
+            <div class="widget-header"> <i class="icon-list-ol"></i>
               <h3>Finalizadas</h3>
             </div>
             <!-- /widget-header -->
@@ -80,7 +127,7 @@
                 <thead>
                   <tr>
                     <th> Usuário </th>
-                    <th> Tipo de solicitação </th>
+                    <th> Tipo </th>
                     <th> Status </th>
                     <th style="min-width:100px"> Enviado em </th>
                     <th style="min-width:100px"> Arquivo CAD </th>

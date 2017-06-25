@@ -3,12 +3,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
+from django.conf import settings
+import os
 
 
 def validate_cad_file(file):
     LIMIT = 25 * 1024 * 1024  # 25MB
     valid_extensions = ['.stl', '.dxf']
-    import os
     ext = os.path.splitext(file.name)[1]
     if ext not in valid_extensions:
         raise ValidationError(
@@ -97,16 +98,18 @@ class Request(models.Model):
         if not self.status == Request.RECEIVED:
             # Resquest is approvable for status = Received
             raise ValidationError
-        req.status = IN_PROGRESS
+        self.status = Request.IN_PROGRESS
         success = False
         try:
             subject = str(self.pk)
-            with open(self.g_code, 'r') as g_code:
-                message = g_code.read().replace('\n', '')
-            from_email = 'pereirasallan@gmail.com'
-            recipient = ['pereirasallan@gmail.com']
+            pwd = os.path.dirname(__file__)
+            with open(settings.PROJECT_DIR + str(self.g_code.url), 'r') as g_code:
+                message = g_code.read()
+            from_email = settings.EMAIL_HOST_USER
+            recipient = [settings.CNC_EMAIL]
             send_mail(subject, message, from_email,
                       recipient, fail_silently=False)
+            self.save()
             success = True
         except Exception as e:
             print(e)

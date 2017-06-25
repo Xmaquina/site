@@ -8,4 +8,6 @@ urlpatterns = [
         views.request_new, name='Request_new'),
     url(r'^cancel/(?P<req_id>\d+)',
         views.request_cancel, name='Request_cancel'),
+    url(r'^approve/(?P<req_id>\d+)',
+        views.request_approve, name='Request_approve'),
 ]

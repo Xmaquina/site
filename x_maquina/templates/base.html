@@ -1,7 +1,6 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="utf-8">
   <title>X-Máquina - CNC de Laser e Fresa</title>
@@ -72,7 +71,7 @@
               <i class="icon-user"></i> {% firstof user.get_full_name user.get_username %} <b class="caret"></b>
             </a>
               <ul class="dropdown-menu">
-                <li><a href="javascript:;">Perfil</a></li>
+                <li><a href="{% url 'user:Profile' %}">Perfil</a></li>
                 <li><a href="{% url 'user:Logout' %}">Sair</a></li>
               </ul>
             </li>
