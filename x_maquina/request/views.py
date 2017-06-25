@@ -1,13 +1,20 @@
 # -*- coding: utf-8 -*-
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.http import HttpResponseRedirect
 from request.forms import RequestForm
 from request.models import Request
 import traceback
 import subprocess
+import os
+import os.path
 
 
+@login_required
 def request_list(request):
     reqs = None
     if request.user.is_superuser:
@@ -43,31 +50,86 @@ def request_list(request):
                    'total_negated_reqs': total_negated_reqs})
 
 
+@login_required
 def request_new(request):
     if request.method == 'POST':
         request_form = RequestForm(request.POST, request.FILES)
         if request_form.is_valid():
+            req = request_form.save(commit=False)
+            req.owner = request.user
+            success = False
             try:
-                req = request_form.save(commit=False)
-                req.owner = request.user
+                req.save()
+                ext = ".ngc"
+                path_g_code = os.path.splitext(req.cad_file.path)[0] + ext
+                cmd = "python pycam/pycam --export-gcode=" \
+                      + path_g_code + " " \
+                      "--bounds-type=relative-margin " \
+                      "--bounds-lower=0.1,0.05,-0.1 " \
+                      "--tool-shape=cylindrical " \
+                      "--process-milling-style=conventional " \
+                      "--tool-spindle-speed=1000 " \
+                      "--process-path-strategy=engrave " \
+                      "--process-step-down=3.00 " + str(req.cad_file.path)
                 try:
-                    req.save()
                     gcode_process_out = subprocess.check_output(
-                        'Slic3r/slic3r.pl ' + str(req.cad_file.path),
-                        shell=True, timeout=5)
-                    messages.success(request, "Solicitação recebida!")
-                    return redirect('request:Request_list')
-                except subprocess.CalledProcessError as gcode_exception:
-                    req.delete()
-                    print("error code " + str(gcode_exception.returncode) +
-                          str(gcode_exception.output))
-                    messages.error(
-                        request, "Arquivo STL não pôde ser validado!")
-            except Exception as e:
-                print(e)
+                        cmd, shell=True, timeout=5)
+                    req.g_code.name = path_g_code.split(
+                        settings.MEDIA_ROOT)[-1]
+                    req.save()
+                    if not os.path.exists(path_g_code):
+                        # Failed to generate G-code
+                        msg = "Falha na geração do G-code, "\
+                            "o arquivo não pôde ser convertido! "\
+                            "Envie somente modelos 2D nos formatos .dxf ou .stl "\
+                            "A solicitação não pôde ser salva."
+                        messages.error(request, msg)
+                    else:
+                        messages.success(request, "Solicitação recebida!")
+                        success = True
+                except Exception as gcode_exception:
+                    print("error code " + str(gcode_exception))
+                    messages.error(request, "Erro na geração do G-code!")
+            except Exception as operational_error:
+                print(operational_error)
                 traceback.print_exc()
-            messages.error(request, "Falha ao salvar solicitação!")
+                messages.error(request, "Falha ao salvar solicitação!")
+            if not success:
+                try:
+                    req.cad_file.delete()
+                except:
+                    pass
+                req.delete()
+            return redirect('request:Request_list')
     else:
         request_form = RequestForm()
     return render(request, 'request/request_form.html', {
         'form': request_form})
+
+
+@login_required
+def request_cancel(request, req_id):
+    req = get_object_or_404(Request, pk=req_id)
+    if not request.user.is_superuser and req.owner != request.user:
+        raise PermissionDenied
+    if not req.is_available_for_cancelling():
+        # Cancelling is not available for other status
+        raise ValidationError
+    req.status = Request.CANCELLED
+    req.save()
+    messages.success(request, "Solicitação cancelada!")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def request_approve(request, req_id):
+    req = get_object_or_404(Request, pk=req_id)
+    if not request.user.is_superuser and req.owner != request.user:
+        raise PermissionDenied
+    try:
+        req.approve()
+        messages.success(request, "Solicitação cancelada!")
+    except Exception as e:
+        print(e)
+        messages.error(request, "Falha ao aprovar solicitação!")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

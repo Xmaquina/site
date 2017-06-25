@@ -16,6 +16,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='request',
             name='cad_file',
-            field=models.FileField(upload_to=request.models.user_directory_path, validators=[request.models.validate_stl_file], verbose_name='Arquivo STL'),
+            field=models.FileField(upload_to=request.models.user_directory_path, validators=[
+                                   request.models.validate_cad_file], verbose_name='Arquivo CAD'),
         ),
     ]

@@ -10,41 +10,53 @@
               <h3>Pendentes para aprovação</h3>
             </div>
             <!-- /widget-header -->
-            <div class="widget-content" style="overflow-x:auto;max-height:400px;overflow:auto">
+            <div class="widget-content" style="max-height:400px;overflow:auto">
               <table class="table table-striped table-bordered table-responsive">
                 <thead>
                   <tr>
-                    <th> Usuário </th>
+                    <th style="width:100px"> Usuário </th>
+                    <th> Tipo de solicitação </th>
                     <th> Status </th>
                     <th style="min-width:100px"> Enviado em </th>
-                    <th style="min-width:100px"> Arquivo STL </th>
+                    <th style="min-width:150px; text-align:center"> Download Arquivos </th>
                     <th class="td-actions" style="min-width:180px; text-align:center"> Ações para a solicitação </th>
                   </tr>
                 </thead>
                 <tbody>
                   {% if not pending_requests %}
                   <tr>
-                    <td colspan="5" style="text-align:center">Nenhuma solicitação</td>
+                    <td colspan="6" style="text-align:center">Nenhuma solicitação</td>
                   </tr>
                   {% else %} {% for req in pending_requests %}
                   <tr>
-                    <td style="text-align:center">
-                      {{ req.owner.get_full_name }}<br> ({{ req.owner.get_username }})
+                    <td style="text-align:center;">
+                      {{ req.owner.get_full_name }}<br>
+                      <small style="font-size:10px">{{ req.owner.get_username }}</small>
                     </td>
+                    <td>{{ req.get_cnc_option_display }}</td>
                     <td>{{ req.get_status_display }}</td>
                     <td>{{ req.sent_at }}</td>
                     <td class="td-actions">
                       <a href="{{ req.cad_file.url }}" class="btn btn-small btn-primary">
-                        <i class="btn-icon-only icon-download"> </i> Download
+                        <i class="btn-icon-only icon-download"> </i> CAD
+                      </a>&nbsp;
+                      {% if req.g_code %}
+                      <a href="{{ req.g_code.url }}" class="btn btn-small btn-primary">
+                        <i class="btn-icon-only icon-download"> </i> G-code
                       </a>
+                      {% endif %}
                     </td>
                     <td class="td-actions">
-                      <a href="javascript:;" class="btn btn-small btn-success">
+                      {% if req.status == 0 %}
+                      <a href="javascript:;" data-toggle="modal" data-target="#confirm-approval-modal" class="btn btn-success btn-small approve-request">
                         <i class="btn-icon-only icon-ok"> </i> Aprovar
                       </a>&nbsp;
-                      <a href="javascript:;" class="btn btn-danger btn-small">
+                      {% endif %}
+                      {% if req.is_available_for_cancelling %}
+                      <a href="#" data-href="{% url 'request:Request_cancel' req_id=req.pk %}" data-toggle="modal" data-target="#confirm-cancel-modal" class="btn btn-danger btn-small cancel-request">
                         <i class="btn-icon-only icon-remove"> </i> Cancelar
                       </a>
+                      {% endif %}
                     </td>
                   </tr>
                   {% endfor %} {% endif %}
@@ -68,9 +80,10 @@
                 <thead>
                   <tr>
                     <th> Usuário </th>
+                    <th> Tipo de solicitação </th>
                     <th> Status </th>
                     <th style="min-width:100px"> Enviado em </th>
-                    <th style="min-width:100px"> Arquivo STL </th>
+                    <th style="min-width:100px"> Arquivo CAD </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -80,7 +93,11 @@
                   </tr>
                   {% else %} {% for req in other_requests %}
                   <tr>
-                    <td>{% firstof req.owner.get_full_name req.owner.get_username %}</td>
+                    <td style="text-align:center;">
+                      {{ req.owner.get_full_name }}<br>
+                      <small style="font-size:10px">{{ req.owner.get_username }}</small>
+                    </td>
+                    <td>{{ req.get_cnc_option_display }}</td>
                     <td>{{ req.get_status_display }}</td>
                     <td>{{ req.sent_at }}</td>
                     <td class="td-actions">
@@ -132,6 +149,50 @@
     <!-- /row -->
   </div>
   <!-- /container -->
+  <div class="modal fade" id="confirm-approval-modal" tabindex="-1" role="dialog" aria-labelledby="approving_request" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Confirmação
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja aprovar a solicitação?<br>
+                Aprovar uma solicitação envia o G-code a caixa de entrada da CNC.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <a class="btn btn-success btn-ok" id="approve">Enviar</a>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="confirm-cancel-modal" tabindex="-1" role="dialog" aria-labelledby="cancelling_request" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              Confirmação
+          </div>
+          <div class="modal-body">
+              Tem certeza que deseja cancelar a solicitação?
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
+              <a class="btn btn-danger btn-ok" id="cancel">Sim</a>
+          </div>
+      </div>
+  </div>
+</div>
 </div>
 <!-- /main-inner -->
+{% endblock %}
+{% block extrajs %}
+<script>
+$('.cancel-request').on('click', function() {
+    $('#cancel').attr('href', $(this).attr('data-href'));
+});
+$('.approve-request').on('click', function() {
+    $('#approve').attr('href', $(this).attr('data-href'));
+});
+</script>
 {% endblock %}

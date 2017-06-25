@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'rmzpr)*r60lr$jo=*t()8fcr5q_s$xun3e@6%dgbvn9f%j)2=_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -132,3 +132,5 @@ LOGIN_REDIRECT_URL = '/'
 LANGUAGE_CODE = 'pt-BR'
 
 TIME_ZONE = 'America/Sao_Paulo'
+
+CNC_EMAIL = ''
