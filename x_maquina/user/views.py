@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from .forms import UserCreationForm, UserChangeForm
@@ -48,3 +49,42 @@ def user_profile(request):
         profile_form = UserChangeForm(instance=request.user)
     return render(request, 'user/profile.html', {
         'form': profile_form})
+
+
+@login_required
+def user_update_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(
+            data=request.POST, user=request.user)
+        if form.is_valid():
+            u = form.save(commit=False)
+            success = True
+            if not success:
+                messages.error(request, "Falha ao atualizar senha!")
+            else:
+                messages.error(request, "Senha atualizada!")
+            u.save()
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+        form = PasswordChangeForm(user=request.user)
+    return render(request, 'user/password.html', {
+        'form': form})
+
+
+def user_reset_password(request):
+    if request.method == 'POST':
+        form = PasswordResetForm(
+            data=request.POST)
+        if form.is_valid():
+            form.save()
+            success = True
+            if not success:
+                messages.error(request, "Falha ao redefinir senha!")
+            else:
+                messages.error(
+                    request, "Verifique sua caixa de entrada de email!")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+        form = PasswordResetForm()
+    return render(request, 'user/password_reset.html', {
+        'form': form})

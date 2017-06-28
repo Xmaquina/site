@@ -66,14 +66,15 @@
         {% if user.is_authenticated %}
         <div class="nav-collapse">
           <ul class="nav pull-right">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="icon-user"></i> {% firstof user.get_full_name user.get_username %} <b class="caret"></b>
-            </a>
-              <ul class="dropdown-menu">
-                <li><a href="{% url 'user:Profile' %}">Perfil</a></li>
-                <li><a href="{% url 'user:Logout' %}">Sair</a></li>
-              </ul>
+            <li>
+              <a href="{% url 'user:Profile' %}">
+                <i class="icon-user"></i> {% firstof user.get_full_name user.get_username %}
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'user:Logout' %}">
+                <i class="icon-signout"></i> Sair
+              </a>
             </li>
           </ul>
         </div>
@@ -85,7 +86,7 @@
     <!-- /navbar-inner -->
   </div>
   <!-- /navbar -->
-  {% block menu %} {% if user.is_authenticated %} {% if request.user.is_superuser %} {% include "menu_administrators.html" %} {% else %} {% include "menu_users.html" %} {% endif %} {% endif %} {% endblock %}
+  {% block menu %} {% if request.user.is_authenticated %} {% include "menu.html" %} {% endif %} {% endblock %}
   <div class="main">
     {% block content %} {{ content }} {% endblock %}
   </div>

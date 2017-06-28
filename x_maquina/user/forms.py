@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from django.forms import EmailField
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, \
+    UserChangeForm
 from django.utils.translation import ugettext_lazy as _
 
 from django.contrib.auth.models import User
@@ -62,10 +63,11 @@ class UserChangeForm(UserChangeForm):
         super(UserChangeForm, self).__init__(*args, **kwargs)
         self.fields['first_name'].label = "Nome"
         self.fields['first_name'].required = True
+        self.fields.pop('password')
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if User.objects.filter(email=email):
+        if User.objects.filter(email=email).exclude(email=self.instance.email):
             raise forms.ValidationError(
                 "E-mail já cadastrado!", code='email_registered')
         return email
@@ -80,4 +82,4 @@ class UserChangeForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ("first_name", "email", "password")
+        fields = ("first_name", "email")

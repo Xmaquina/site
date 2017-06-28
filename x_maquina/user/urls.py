@@ -12,4 +12,6 @@ urlpatterns = [
     url(r'^new/$', views.registrate, name='Registrate'),
     url(r'^profile/$',
         views.user_profile, name='Profile'),
+    url(r'^updatepassoword/$',
+        views.user_update_password, name='Update_password'),
 ]

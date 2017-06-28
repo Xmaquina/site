@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^user/', include('user.urls', namespace="user")),
     url(r'^request/', include('request.urls', namespace="request")),
+    url('^', include('django.contrib.auth.urls')),
 ]
 
 # This enables static files to be served from the Gunicorn server
