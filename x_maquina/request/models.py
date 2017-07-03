@@ -101,7 +101,7 @@ class Request(models.Model):
         self.status = Request.IN_PROGRESS
         success = False
         try:
-            subject = str(self.pk)
+            subject = str(self.pk) + " / " + str(self.cnc_option)
             pwd = os.path.dirname(__file__)
             with open(settings.PROJECT_DIR + str(self.g_code.url), 'r') as g_code:
                 message = g_code.read()

@@ -99,8 +99,12 @@ else:
     # See https://cloud.google.com/sql/docs/mysql-connect-proxy
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'xmaquina',
+            'USER': 'xmaquina',
+            'PASSWORD': 'hyU5rPX!9%#$afzE',
+            'HOST': 'localhost',
+            'PORT': '3306',
         }
     }
 # [END db_setup]
@@ -139,3 +143,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'xmaquinaservidor@gmail.com'
 EMAIL_HOST_PASSWORD = 'x1maquina2'
 EMAIL_PORT = 587
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
