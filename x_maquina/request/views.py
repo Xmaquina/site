@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from celery.schedules import crontab
+from celery.task import periodic_task
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
@@ -8,14 +10,29 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.http import HttpResponseRedirect
 from request.forms import RequestForm
 from request.models import Request
+from request.read_mail import *
 import traceback
 import subprocess
 import os
 import os.path
 
 
+def update_status():
+    print("Lendo emails")
+    mails = read_mails(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+    for k in mails.keys():
+        m = k.split(" / ")
+        try:
+            req = Request.objects.get(pk=m[0])
+            req.status = m[1]
+            req.save()
+        except:
+            print("ERRO ATUALIZANDO SOLICITAÇÃO")
+
+
 @login_required
 def request_list(request):
+    update_status()
     reqs = None
     if request.user.is_superuser:
         pending_requests = Request.objects.filter(
