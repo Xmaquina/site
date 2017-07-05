@@ -1,0 +1,75 @@
+G40 (disable tool radius compensation)
+G49 (disable tool length compensation)
+G80 (cancel modal motion)
+G54 (select coordinate system 1)
+G90 (disable incremental moves)
+G21 (metric)
+F1000.00000
+S1000.00000
+G61 (exact path mode)
+;PYCAM_TOOLPATH_SETTINGS: START
+;[Bounds]
+;maxz = 0.0
+;maxx = 37.553299
+;maxy = 22.234547
+;minx = -3.7553299
+;miny = -1.11172735
+;minz = 0.0
+;
+;[Tool]
+;torus_radius = 0.125
+;speed = 1000.0
+;shape = CylindricalCutter
+;tool_radius = 0.5
+;
+;[Process]
+;engrave_offset = 0.0
+;step_down = 3.0
+;generator = EngraveCutter
+;postprocessor = SimpleCutter
+;overlap_percent = 0
+;milling_style = conventional
+;material_allowance = 0.0
+;pocketing_type = none
+;path_direction = x
+;
+;PYCAM_TOOLPATH_SETTINGS: END
+G0 Z25.00000
+M3 (start spindle)
+G04 P3 (wait for 3 seconds)
+ X37.55330 Y22.23455
+G1 Z0.00000
+ X23.08630
+ Y11.13498
+ X37.55330
+ Y0.00000
+ X23.08630
+G0 Z25.00000
+ X8.46682 Y11.13498
+G1 Z0.00000
+ X6.00000
+G0 Z25.00000
+ Y22.23455
+G1 Z0.00000
+ X14.46682
+G0 Z25.00000
+ X6.00000
+G1 Z0.00000
+ X0.00000
+ Y11.13498
+ X6.00000
+G0 Z25.00000
+ X8.46682
+G1 Z0.00000
+ X14.46682
+ Y0.00000
+ X8.46682
+G0 Z25.00000
+ X0.00000
+G1 Z0.00000
+ X8.46682
+G0 Z25.00000
+M5 (stop spindle)
+G04 P3 (wait for 3 seconds)
+G0 Z25.00000
+M2 (end program)

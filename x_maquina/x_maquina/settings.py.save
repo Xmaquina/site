@@ -27,7 +27,7 @@ SECRET_KEY = 'rmzpr)*r60lr$jo=*t()8fcr5q_s$xun3e@6%dgbvn9f%j)2=_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['www.xmaquina.site', 'xmaquina.site', '192.81.214.113']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -140,9 +140,9 @@ TIME_ZONE = 'America/Sao_Paulo'
 CNC_EMAIL = 'xmaquinaxmaquina@gmail.com'
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = x'smtp.gmail.com'
 EMAIL_HOST_USER = 'xmaquinaservidor@gmail.com'
 EMAIL_HOST_PASSWORD = 'x1maquina2'
 EMAIL_PORT = 587
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

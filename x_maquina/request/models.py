@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.conf import settings
+from request.send_mail import *
 import os
 
 
@@ -105,10 +106,8 @@ class Request(models.Model):
             pwd = os.path.dirname(__file__)
             with open(settings.PROJECT_DIR + str(self.g_code.url), 'r') as g_code:
                 message = g_code.read()
-            from_email = settings.EMAIL_HOST_USER
-            recipient = [settings.CNC_EMAIL]
-            send_mail(subject, message, from_email,
-                      recipient, fail_silently=False)
+           # send_message(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD, settings.CNC_EMAIL, subject, message)
+            send_mail(subject, message, settings.EMAIL_HOST_USER, [settings.CNC_EMAIL], fail_silently=False)
             self.save()
             success = True
         except Exception as e:

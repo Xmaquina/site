@@ -67,7 +67,7 @@ def request_new(request):
                 req.save()
                 ext = ".ngc"
                 path_g_code = os.path.splitext(req.cad_file.path)[0] + ext
-                cmd = "python pycam/pycam --export-gcode=" \
+                cmd = "python2 /home/allan/xmaquinaproject/xmaquina/site/x_maquina/pycam/pycam --export-gcode=" \
                       + path_g_code + " " \
                       "--bounds-type=relative-margin " \
                       "--bounds-lower=0.1,0.05,-0.1 " \
